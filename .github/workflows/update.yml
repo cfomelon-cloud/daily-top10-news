@@ -1,0 +1,46 @@
+name: Update news site
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 22:00 UTC = 06:00 Hong Kong
+    - cron: "0 10 * * *"   # 10:00 UTC = 18:00 Hong Kong
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-news
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate index.html
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python update_news.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "news-bot"
+          git config user.email "actions@github.com"
+          git add index.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-update news $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
