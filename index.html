@@ -7,7 +7,7 @@
 <style>
   :root{--bg:#0f1115;--panel:#171a21;--panel2:#1d222b;--line:#2a2f3a;--txt:#e8eaed;
     --muted:#9aa2b1;--accent:#4f8cff;--chip:#242a35;--uk:#5b8def;--hk:#e0556b;--sg:#e0a83c;
-    --us:#42b98a;--new:#2ec17c;--dev:#e0a83c;}
+    --us:#42b98a;--cn:#e23b3b;--new:#2ec17c;--dev:#e0a83c;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,
     "Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;font-size:15px}
@@ -31,6 +31,7 @@
   .tab[data-j="hk"].active{background:var(--hk);border-color:var(--hk)}
   .tab[data-j="sg"].active{background:var(--sg);border-color:var(--sg);color:#1a1400}
   .tab[data-j="us"].active{background:var(--us);border-color:var(--us);color:#04231a}
+  .tab[data-j="cn"].active{background:var(--cn);border-color:var(--cn)}
   main{max-width:920px;margin:0 auto;padding:18px 16px 60px}
   .panel{display:none} .panel.active{display:block}
   .panel h2{font-size:16px;margin:6px 4px 14px;color:var(--muted);font-weight:600}
@@ -39,6 +40,7 @@
   .card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
   .uk .card:before{background:var(--uk)} .hk .card:before{background:var(--hk)}
   .sg .card:before{background:var(--sg)} .us .card:before{background:var(--us)}
+  .cn .card:before{background:var(--cn)}
   .rank{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;
     background:var(--chip);font-weight:700;font-size:14px;margin-right:9px;color:var(--txt);flex:0 0 auto}
   .head{display:flex;align-items:flex-start;margin-bottom:7px}
@@ -57,7 +59,7 @@
 </head>
 <body>
 <header>
-  <h1>Daily Top 10 — UK · Hong Kong · Singapore · US</h1>
+  <h1>Daily Top 10 — UK · Hong Kong · Singapore · US · China</h1>
   <p class="sub">Updated Thu 30 Jul 2026, afternoon HKT · ranked by prominence + engagement + recency</p>
 </header>
 <div class="legend">
@@ -69,6 +71,7 @@
   <div class="tab" data-j="hk"><span class="flag">🇭🇰</span>Hong Kong</div>
   <div class="tab" data-j="sg"><span class="flag">🇸🇬</span>Singapore</div>
   <div class="tab" data-j="us"><span class="flag">🇺🇸</span>US</div>
+  <div class="tab" data-j="cn"><span class="flag">🇨🇳</span>China</div>
 </nav>
 <main>
 
@@ -330,6 +333,71 @@
   <div class="outlets"><span class="chip">CNN</span><span class="chip">NPR</span><span class="chip">Washington Post</span><span class="chip">NBC News</span></div>
   <span class="lbl">Summary</span><p class="summary">Multi-day funeral services concluded for Sen. Lindsey Graham, the 71-year-old Trump ally who died July 12 of an aortic dissection. Lawmakers from both parties gathered to remember the influential foreign-policy hawk, whose namesake Russia sanctions bill advanced in the Senate this week.</p>
   <div class="commentary"><span class="lbl">Commentary</span><p>Graham's death removes one of the Senate's most prominent foreign-policy voices amid an active Middle East war he would have been central to shaping. His South Carolina seat now sets up a closely watched succession fight.</p></div></div>
+</section>
+
+<!-- CN -->
+<section class="panel cn" id="cn">
+  <h2>China (mainland) — top 10</h2>
+
+  <div class="card"><div class="head"><span class="rank">1</span><h3>Politburo sets second-half economic agenda, calls Fifth Plenum for October (中央政治局會議)</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">30 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Xinhua 新华社</span><span class="chip">Yicai 第一财经</span><span class="chip">NBD 每经</span><span class="chip">Bloomberg</span></div>
+  <span class="lbl">Summary</span><p class="summary">The CPC Politburo, chaired by Xi Jinping, met on 30 July and decided to convene the 20th Central Committee's Fifth Plenum in Beijing in October. The readout pledged more proactive fiscal spending and "appropriately loose" monetary policy, prioritising consumption, stabilising the property market, defusing local debt and supporting employment, while flagging "difficulties and challenges."</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The late-July Politburo is the year's key mid-course economic signal; the language points to continuity plus incremental support rather than large new stimulus. State outlets frame it as steady optimisation, while international coverage emphasises a slowdown prompting stimulus deliberations — watch the plenum for any 15th Five-Year Plan signals.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">2</span><h3>A-share tech selloff even as state capital launches a buyback/stabilisation wave</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">30 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">NBD 每经</span><span class="chip">Shanghai Securities Journal 上证报</span><span class="chip">Securities Daily 证券日报</span></div>
+  <span class="lbl">Summary</span><p class="summary">The three main indices fell sharply, with the ChiNext down 5.89% and the STAR 50 down 6.34%, while the Shanghai Composite slipped 1.15% to 3,784.55. Simultaneously, the securities papers led with a wave of state-capital support — SOE share increases (e.g. BOE) and large buybacks such as memory-chip firm Zhaoyi Innovation's up-to-¥20bn cancellation buyback.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The split screen — record IPO froth and a heavy tech pullback the same week — highlights stretched valuations in AI/chips versus a defensive rotation into liquor and banks. The coordinated buyback messaging is a familiar stabilisation playbook; the question is whether it steadies sentiment or merely cushions a deeper correction.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">3</span><h3>National anti-cyberbullying draft law opens for public comment (《反网络暴力法》征求意见)</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Xinhua 新华网</span><span class="chip">Sina Finance</span><span class="chip">Beijing News 新京报</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Cyberspace Administration of China released a draft "Anti-Online Violence Law" for public consultation, setting rules to prevent, stop and punish online harassment, with obligations on platforms for early warning, victim protection and rapid handling. It is China's first dedicated statute on the issue, elevating prior departmental rules to national law.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The draft is trending heavily on Weibo, amplified by fresh high-profile harassment cases; supporters see overdue victim protection, while some observers watch whether expanded platform-governance and identity provisions also broaden content control. Key to watch: the definition of "online violence" and the balance with speech.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">4</span><h3>US FCC adds foreign advanced robotics and power inverters to "covered list"; Beijing protests</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">30 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Xinhua 新华网</span><span class="chip">MOFCOM 商务部</span><span class="chip">VOA Chinese</span></div>
+  <span class="lbl">Summary</span><p class="summary">The US Federal Communications Commission added foreign-made advanced robotics equipment and power inverters to its "covered list," a step widely read as targeting Chinese suppliers. China's Commerce Ministry said Beijing firmly opposes the "generalisation of national security" and reserves the right to respond.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>This opens a potential new front — humanoid/embodied robotics and grid inverters — in US–China tech decoupling, sectors where Chinese firms have scaled fast. It sits awkwardly against the still-fragile tariff truce; watch for reciprocal Chinese measures or entity-list actions.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">5</span><h3>Changxin DRAM mega-IPO becomes the A-share market's most valuable company (长鑫科技)</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 3 days old</span><span class="date">listed 27 Jul · update 30 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">STCN 证券时报网</span><span class="chip">Sina Finance</span></div>
+  <span class="lbl">Summary</span><p class="summary">Domestic DRAM champion Changxin Technology debuted on 27 July, its market cap topping ¥3 trillion on day one and reaching roughly ¥3.3–3.5 trillion as shares surged ~14–15% on 29 July — making it the A-share market's most valuable listed company and surpassing Intel. Pre-IPO bank shareholders booked paper gains reported above ¥100bn.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The listing is a landmark for China's push toward memory-chip self-sufficiency and a magnet for the domestic-substitution trade. The euphoria also fuels bubble concerns — its surge contrasts sharply with the broader tech selloff (see #2); the valuation's sustainability is the key watch item.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">6</span><h3>Typhoon Hongxia aftermath and widespread flooding across south and central China (台风"红霞")</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · ~4 days old</span><span class="date">landfall 26 Jul · update 30 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">China Weather 中国天气网</span><span class="chip">China News Service 中新网</span><span class="chip">Emergency Mgmt Ministry</span></div>
+  <span class="lbl">Summary</span><p class="summary">Typhoon Hongxia (No. 12) made landfall in Huizhou, Guangdong on 26 July as the strongest typhoon to hit China so far this year, suspending rail and airport operations. Its rain band and separate monsoon systems have since driven heavy downpours and flood/geological-disaster warnings across Guangdong, Hunan, Hubei, Jiangxi, Henan and the Sichuan Basin.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Cumulative summer flooding is straining emergency response across multiple river basins; the Politburo readout explicitly flagged disaster preparedness. Watch reservoir management, agricultural losses and any casualty updates as systems move north.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">7</span><h3>Moonshot open-sources Kimi K3, billed as the world's largest open model at 2.8 trillion parameters</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 2–3 days old</span><span class="date">27–28 Jul · update 30 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Xinhua 新华网</span><span class="chip">21st Century Herald 21财经</span><span class="chip">Securities Times 证券时报</span></div>
+  <span class="lbl">Summary</span><p class="summary">AI firm Moonshot (月之暗面) fully open-sourced its Kimi K3 model — about 2.8 trillion parameters, described as the largest open-source model globally and topping several international benchmarks. Domestic compute and application firms are reported to be rapidly adapting to it.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Coming shortly after the Shanghai World AI Conference, the release reinforces China's open-weight strategy as a counter to US closed frontier labs and export controls. The competitive question is whether open Chinese models can convert benchmark leadership into a durable global developer ecosystem.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">8</span><h3>US–China trade: Beijing says Washington pledged to cap "replacement" tariffs at 20%</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 3 days old</span><span class="date">27 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Bloomberg</span><span class="chip">Coface</span><span class="chip">Transport Topics</span></div>
+  <span class="lbl">Summary</span><p class="summary">Chinese officials said the US committed to capping any replacement tariffs at 20% under the truce that followed the November 2025 Trump–Xi summit. The framing keeps the tariff-pause architecture intact while the two sides continue talks on tech and rare earths.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The cap, if honoured, gives exporters some certainty, but the fresh FCC robotics action (#4) shows non-tariff friction intensifying beneath the truce. Watch for US confirmation and whether robotics/inverter controls trigger Chinese countermeasures that test the deal.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">9</span><h3>Gas-cylinder explosion tears through a Jiangxi apartment building (江西居民楼燃气爆燃)</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">China.com 中华网</span><span class="chip">Local Jiangxi media</span></div>
+  <span class="lbl">Summary</span><p class="summary">A suspected gas-cylinder leak triggered an explosion around 6pm on 29 July in a residential building in Shangrao, Jiangxi, blowing out windows and walls on an upper floor and damaging a facing building; the blast was reportedly heard over a kilometre away. No deaths were reported, with at least one resident treated; the cause is under investigation.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The incident drew wide online attention and feeds recurring concern over bottled-gas safety in older residential blocks. It aligns with the Politburo's renewed emphasis on preventing major accidents; watch for a safety-inspection campaign in response.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">10</span><h3>Youth table-tennis player banned one year for striking opponent after a loss</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Sina News 新浪</span><span class="chip">Jiangsu Table Tennis Assoc.</span></div>
+  <span class="lbl">Summary</span><p class="summary">A 14-year-old player struck an opponent after losing a semifinal at a Jiangsu provincial youth selection event. The association issued a public criticism, disqualified him, voided his results, and banned him from provincial events for one year.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The case became a sportsmanship talking point on Weibo, part of a broader conversation about pressure and conduct in China's competitive youth-sports pipelines. The swift, public sanction signals governing bodies' sensitivity to reputational risk.</p></div></div>
 </section>
 </main>
 <footer>
