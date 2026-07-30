@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Top 10 — UK · HK · SG · US</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d222b; --line:#2a2f3a;
+    --txt:#e8eaed; --muted:#9aa2b1; --accent:#4f8cff; --chip:#242a35;
+    --uk:#5b8def; --hk:#e0556b; --sg:#e0a83c; --us:#42b98a;
+    --new:#2ec17c; --dev:#e0a83c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;font-size:15px}
+  header{padding:26px 20px 16px;max-width:920px;margin:0 auto}
+  h1{font-size:23px;margin:0 0 4px;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0}
+  .note{max-width:920px;margin:10px auto 0;padding:0 20px;color:var(--muted);
+    font-size:12.5px;font-style:italic}
+  .legend{max-width:920px;margin:9px auto 0;padding:0 20px;display:flex;gap:14px;
+    font-size:12px;color:var(--muted);align-items:center;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+    padding:2px 8px;border-radius:20px;letter-spacing:.4px;white-space:nowrap}
+  .badge.new{background:rgba(46,193,124,.16);color:var(--new);border:1px solid rgba(46,193,124,.4)}
+  .badge.dev{background:rgba(224,168,60,.14);color:var(--dev);border:1px solid rgba(224,168,60,.4)}
+  .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .tabs{position:sticky;top:0;z-index:5;background:var(--bg);
+    max-width:920px;margin:14px auto 0;padding:8px 14px;display:flex;gap:8px;
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .tab{flex:1;min-width:90px;text-align:center;padding:9px 6px;border-radius:9px;
+    background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    cursor:pointer;font-weight:600;font-size:14px;transition:.15s}
+  .tab .flag{font-size:16px;margin-right:5px}
+  .tab.active{color:#fff}
+  .tab[data-j="uk"].active{background:var(--uk);border-color:var(--uk)}
+  .tab[data-j="hk"].active{background:var(--hk);border-color:var(--hk)}
+  .tab[data-j="sg"].active{background:var(--sg);border-color:var(--sg);color:#1a1400}
+  .tab[data-j="us"].active{background:var(--us);border-color:var(--us);color:#04231a}
+  main{max-width:920px;margin:0 auto;padding:18px 16px 60px}
+  .panel{display:none} .panel.active{display:block}
+  .panel h2{font-size:16px;margin:6px 4px 14px;color:var(--muted);font-weight:600}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;
+    padding:15px 16px 16px;margin-bottom:13px;position:relative;overflow:hidden}
+  .card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .uk .card:before{background:var(--uk)} .hk .card:before{background:var(--hk)}
+  .sg .card:before{background:var(--sg)} .us .card:before{background:var(--us)}
+  .rank{display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:7px;background:var(--chip);
+    font-weight:700;font-size:14px;margin-right:9px;color:var(--txt);flex:0 0 auto}
+  .head{display:flex;align-items:flex-start;margin-bottom:7px}
+  .head h3{font-size:15.5px;margin:1px 0 0;font-weight:650;letter-spacing:-.1px}
+  .meta{display:flex;align-items:center;gap:8px;margin:0 0 9px 35px;flex-wrap:wrap}
+  .date{font-size:11.5px;color:var(--muted)}
+  .outlets{margin:0 0 10px 35px;display:flex;flex-wrap:wrap;gap:5px}
+  .chip{background:var(--chip);color:var(--muted);font-size:11px;
+    padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .lbl{font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;
+    color:var(--muted);font-weight:700;display:block;margin:0 0 2px}
+  .summary{margin:0 0 11px}
+  .commentary{background:var(--panel2);border-radius:9px;padding:10px 12px;
+    border-left:2px solid var(--accent)}
+  .commentary p{margin:0;color:#d3d8e2;font-size:14px}
+  footer{max-width:920px;margin:0 auto;padding:0 20px 50px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Daily Top 10 — UK · Hong Kong · Singapore · US</h1>
+  <p class="sub">Preview mock-up · Wednesday, 29 July 2026 (evening pull) · ranked by prominence + engagement + recency</p>
+</header>
+<p class="note">Draft preview for review. Recency rule applied: each feed leads with genuine last-24-hour stories; an older item appears only if it is still actively developing, tagged with its age and latest-update date. Summaries are neutral; commentary is analytical and non-partisan.</p>
+<div class="legend">
+  <span class="badge new"><span class="dot"></span>NEW</span> broke or materially updated in the last 24h
+  <span class="badge dev"><span class="dot"></span>DEVELOPING</span> older but still active — shows age &amp; last update
+</div>
+
+<nav class="tabs">
+  <div class="tab active" data-j="uk"><span class="flag">🇬🇧</span>UK</div>
+  <div class="tab" data-j="hk"><span class="flag">🇭🇰</span>Hong Kong</div>
+  <div class="tab" data-j="sg"><span class="flag">🇸🇬</span>Singapore</div>
+  <div class="tab" data-j="us"><span class="flag">🇺🇸</span>US</div>
+</nav>
+
+<main>
+<!-- ================= UK ================= -->
+<section class="panel uk active" id="uk">
+  <h2>United Kingdom — top 10</h2>
+
+  <div class="card"><div class="head"><span class="rank">1</span><h3>Greater Manchester braces for the biggest by-election in British history</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · polls open tomorrow</span><span class="date">29 Jul 2026 · vote 30 Jul</span></div>
+  <div class="outlets"><span class="chip">YouGov</span><span class="chip">More in Common</span><span class="chip">LBC</span><span class="chip">Manchester Evening News</span></div>
+  <span class="lbl">Summary</span><p class="summary">The contest to replace Andy Burnham as Mayor of Greater Manchester — triggered when he became PM — goes to the polls Thursday with over two million eligible voters, the largest by-election ever held in the UK. A late YouGov poll puts Labour's Bev Craig first on 38%, ahead of Reform UK (24%) and the Greens (17%), with a projected 62–38 run-off win.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>This is the first electoral test of Burnham's fortnight-old premiership: a comfortable Labour hold steadies him, a Reform surge emboldens critics. The scale of the electorate and a split opposition make turnout, not headline share, the number to watch.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">2</span><h3>Half of England officially declared in drought</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">GOV.UK</span><span class="chip">Sky News</span><span class="chip">Euronews</span><span class="chip">Water Magazine</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Environment Agency confirmed on Wednesday that more than half of England is now officially in drought after record-low rainfall and sustained high temperatures. Officials warned of mounting pressure on water resources, agriculture and wildlife, with further hosepipe restrictions expected.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A midsummer drought declaration hands the new government an immediate environmental and political challenge, reviving scrutiny of water companies' resilience and leakage records. Expect fast escalation to reservoir and abstraction management if the dry spell runs into August.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">3</span><h3>Bank of England decision looms as inflation expectations shift</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026 · decision 30 Jul</span></div>
+  <div class="outlets"><span class="chip">Bank of England</span><span class="chip">Reuters</span><span class="chip">ING</span><span class="chip">HomeOwners Alliance</span></div>
+  <span class="lbl">Summary</span><p class="summary">The MPC announces Thursday, a day after the US Fed. Household inflation expectations eased to 3.4% in July from 3.8%, but rate-setters' comments have hardened the bar for further loosening, leaving the call finely balanced. The FTSE 100 closed near 10,930 despite a global AI/semiconductor sell-off.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>With inflation still above target, the Bank must weigh a fragile growth outlook against price stickiness, and its language will matter as much as the rate itself. It's also an early signal of how Burnham's cost-of-living agenda interacts with independent monetary policy.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">4</span><h3>Andrew Mountbatten-Windsor to give evidence in threats trial</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">ITV News</span><span class="chip">Sky News</span><span class="chip">Hello</span></div>
+  <span class="lbl">Summary</span><p class="summary">Andrew Mountbatten-Windsor is expected to give evidence in the trial of a man accused of threatening behaviour towards him. The case has already seen an 11th-hour delay over newly disclosed evidence.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A courtroom appearance would be a rare, high-profile public turn for the former prince, guaranteeing intense tabloid and international attention. The proceedings keep his legal exposure in the headlines at a sensitive moment for the monarchy.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">5</span><h3>Burnham makes social care and cost-of-living the centre of his young premiership</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 9 days in</span><span class="date">last update 28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Sky News</span><span class="chip">ABC News</span><span class="chip">IBTimes</span><span class="chip">Globe and Mail</span></div>
+  <span class="lbl">Summary</span><p class="summary">After taking office on 20 July and reshuffling out Starmer allies (Reeves replaced by John Healey; Wes Streeting to Defence), Burnham is framing his government around cost-of-living and a long-promised social care overhaul, alongside an energy-bill tax cut and a review of early prisoner release. Reporting this week stresses the personal roots of his care push.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The agenda is popular but collides with a stretched fiscal position that several analysts say leaves little room for new spending. How Burnham funds care reform without an emergency budget will define the credibility of his "cost-of-living government."</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">6</span><h3>Green leader Polanski refuses to apologise over Farage 'guillotine' image</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">IBTimes UK</span><span class="chip">TheJournal</span><span class="chip">Sky News</span></div>
+  <span class="lbl">Summary</span><p class="summary">Green Party leader Zack Polanski was reported to police after sharing an image referencing a guillotine alongside Nigel Farage, with Farage demanding action. Polanski said on Wednesday he would not apologise.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The row sharpens an increasingly bitter fight between the left and populist right over the limits of political imagery. It also raises Polanski's national profile as the Greens position against both Reform and a Labour government tacking to economic pragmatism.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">7</span><h3>Amy Winehouse's father ordered to pay nearly £1m to singer's friends</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">France 24</span><span class="chip">RTÉ</span><span class="chip">Yahoo News UK</span></div>
+  <span class="lbl">Summary</span><p class="summary">A judge ordered Mitch Winehouse to pay nearly £1m to two of his late daughter's friends after a legal battle centred on her clothing and belongings, following a case in which he had sued the pair.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The costly judgment reopens long-running tensions around the management of the late singer's estate and legacy. It's a high-engagement human-interest story likely to dominate entertainment coverage.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">8</span><h3>FA 'deeply concerned' as FIFA moves to sell $4bn World Cup stake</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Sky News</span><span class="chip">Football federations</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Football Association said it was "deeply concerned" over a FIFA proposal to sell a roughly $4bn stake in the World Cup, with several national bodies complaining of insufficient consultation. The plan surfaced Wednesday and drew rapid pushback.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A commercial carve-up of football's flagship tournament touches governance, ownership and the sport's cultural stewardship — a story with both business and fan-anger dimensions. Expect coordinated federation resistance to build.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">9</span><h3>Actor Tom Chadbon dies aged 80</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Yahoo News UK</span><span class="chip">GB News</span><span class="chip">AOL</span></div>
+  <span class="lbl">Summary</span><p class="summary">Tributes were paid on Wednesday to veteran British actor Tom Chadbon, who has died aged 80, known for roles across Doctor Who, a James Bond film and Game of Thrones.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Chadbon's long career spanned several of Britain's most enduring franchises, ensuring warm tributes from fan communities. Obituaries of this kind reliably draw strong online engagement.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">10</span><h3>Body of British woman found in suitcase in Greece</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Sky News</span><span class="chip">Yahoo</span></div>
+  <span class="lbl">Summary</span><p class="summary">The body of a British woman was found inside a suitcase in Greece, prompting a police investigation. Details were still emerging on Wednesday.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A grim discovery abroad involving a UK national typically escalates quickly into a major consular and criminal story. Coverage will hinge on identification and any arrests in the hours ahead.</p></div></div>
+</section>
+
+<!-- ================= HK ================= -->
+<section class="panel hk" id="hk">
+  <h2>Hong Kong — top 10</h2>
+
+  <div class="card"><div class="head"><span class="rank">1</span><h3>Kyushu 7.1 quake: all ~200 HK tour travellers safe as death toll climbs</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 1 day old</span><span class="date">28 Jul · last update 29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">RTHK</span><span class="chip">The Standard</span><span class="chip">SCMP</span><span class="chip">HKCNA</span></div>
+  <span class="lbl">Summary</span><p class="summary">A magnitude-7.1 quake struck Kumamoto on 28 July, with the death toll reaching at least 18, including five in an Aeon Mall collapse. The Travel Industry Council confirmed all ~200 Hong Kong travellers across ~15 tour groups are safe, with no immigration assistance requests filed.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Japan is Hongkongers' single most popular outbound destination, so the story blends real safety anxiety with travel-disruption interest, driving heavy engagement. Watch itinerary changes, insurance and any booking pullback if the 50+ aftershocks persist.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">2</span><h3>Fanling tin-hut fire kills one man; 100+ evacuated, e-bike battery suspected (粉嶺靈山村鐵皮屋大火)</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026 · ~4am</span></div>
+  <div class="outlets"><span class="chip">Sing Tao 星島</span><span class="chip">i-Cable</span><span class="chip">Oriental Daily 東方</span><span class="chip">HKCNA</span></div>
+  <span class="lbl">Summary</span><p class="summary">A fire tore through a tin-roofed structure in Ling Shan Village, Fanling, before dawn, leaving a middle-aged man dead and a 12-year-old girl hospitalised. Around 80–100 residents and several pets were evacuated; residents suspect an electric-bicycle battery started the blaze.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>After recent lithium-battery and building fires, the incident feeds an active public-safety debate over e-mobility battery regulation and tin-hut housing risk. Watch for Fire Services comment and any renewed policy push on battery charging.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">3</span><h3>CE John Lee holds first structured dialogue with 67 lawmakers; editorials weigh in (行政立法首次交流會)</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 1 day old</span><span class="date">28 Jul · editorials 29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Ming Pao 明報</span><span class="chip">Ta Kung Pao 大公</span><span class="chip">Wen Wei Po 文匯</span><span class="chip">RTHK</span></div>
+  <span class="lbl">Summary</span><p class="summary">The CE convened an inaugural "talk-and-exchange" session with 67 LegCo members under the executive-legislative cooperation framework. Pro-establishment papers hailed it as an efficient "governance model with Hong Kong characteristics," while Ming Pao cautioned that policy-delivery quality, not dialogue format, determines effective governance.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The split editorial framing is the signal — even sympathetic commentary is quietly flagging substance-over-optics. It marks continued institutional normalisation of the post-reform "patriots-only" legislature.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">4</span><h3>Acting Financial Secretary Michael Wong rebuts renewed "Hong Kong is over" narrative</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">The Standard</span><span class="chip">HKCNA</span></div>
+  <span class="lbl">Summary</span><p class="summary">Acting Financial Secretary Michael Wong publicly rejected claims that Hong Kong's economic model has failed, citing "resilience, vitality and emerging opportunities." The remarks respond to a fresh wave of pessimistic commentary, landing the same week as strong export figures (+53.4%) and robust HKMA reserve returns.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Officials rarely address the declinist narrative head-on, so a direct rebuttal signals how sensitive sentiment has become amid uneven retail and property data. The government will lean on the export and reserve figures as counter-evidence.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">5</span><h3>Nine straight days of rain forecast; special weather alert, up to four tropical systems eyed</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">HK01 香港01</span><span class="chip">HKBT</span><span class="chip">The Standard</span><span class="chip">HK Observatory</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Observatory issued a special weather alert warning of widespread heavy rain and strong winds, forecasting up to nine consecutive rainy days. AI-assisted modelling flags the possible development of as many as four tropical systems across the region next week.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Following the recent Typhoon Co-may No.9 signal, sustained unsettled weather keeps flooding and landslide risk elevated and dominates commuter coverage. The multi-system outlook means typhoon-signal watching likely runs into next week.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">6</span><h3>High Court judge Wilson Chan to take early retirement over serial plagiarism</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 2 days old</span><span class="date">27 Jul · commentary 29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">SCMP</span><span class="chip">HKFP</span><span class="chip">The Standard</span><span class="chip">RTHK</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Chief Justice asked High Court judge Wilson Chan to retire early after findings of repeated plagiarism in his judgments. Legal experts and SCMP's editorial argued the outcome is a sufficient penalty and demonstrates a self-policing judiciary.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Unusually high-profile for the HK bench, the case touches judicial integrity amid intense scrutiny of the courts. The "self-policing" framing is doing deliberate reputational work, though critics may see the sanction as lenient.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">7</span><h3>Man City name 28-man Hong Kong squad for Kai Tak — no Haaland or Rodri</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">The Standard</span><span class="chip">RTHK</span><span class="chip">Man City</span></div>
+  <span class="lbl">Summary</span><p class="summary">Manchester City released a 28-player roster for their Asia pre-season tour, omitting Erling Haaland and Rodri (resting after World Cup duty), ahead of Saturday's Hong Kong Football Festival fixture against Inter Milan at Kai Tak Stadium. RTHK ran a parallel "value for money" debate.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The absent stars will disappoint ticket-holders and reignite the value-for-money argument over publicly linked mega-events at Kai Tak, echoing the 2024 Messi no-show. Engagement is high on sports and consumer-grievance grounds.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">8</span><h3>Hong Kong men's foil team win silver at world fencing championships</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 1 day old</span><span class="date">28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">RTHK</span><span class="chip">The Standard</span></div>
+  <span class="lbl">Summary</span><p class="summary">Hong Kong's men's foil team reached their first-ever world championship final and secured a silver medal — a milestone for the city's fencing programme following its recent Olympic successes.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Fencing remains Hong Kong's strongest medal sport and a reliable source of civic pride, so the historic final drives positive social sharing. It bolsters the government's elite-sport investment narrative.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">9</span><h3>Airport customs smash three drug cases, HK$19 million seized, four arrested</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Sing Tao 星島</span><span class="chip">HKCNA</span></div>
+  <span class="lbl">Summary</span><p class="summary">Customs officers broke up three separate drug-trafficking cases at Hong Kong International Airport, arresting four people and seizing narcotics worth about HK$19 million. Separate operations this week also netted a Sham Shui Po ketamine flat and a suspected 216-turtle smuggling attempt.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The clustered seizures underscore the airport's continued role as a trafficking chokepoint as passenger volumes recover. Routine but consistently prominent in local crime coverage.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">10</span><h3>HKMA reports HK$134.7 billion Exchange Fund investment income for H1</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">HKCNA</span><span class="chip">HKMA</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Hong Kong Monetary Authority reported HK$134.7 billion in Exchange Fund investment income for the first half of 2026, with equity gains a major contributor, released alongside foreign-reserve data.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Strong reserve returns give the government a timely fiscal talking point against the "economy is failing" narrative (see item 4), though gains are largely market-driven rather than structural. Focus turns to how much cushions the projected budget deficit.</p></div></div>
+</section>
+
+<!-- ================= SG ================= -->
+<section class="panel sg" id="sg">
+  <h2>Singapore — top 10</h2>
+
+  <div class="card"><div class="head"><span class="rank">1</span><h3>SIA Group swings to S$76m Q1 net loss despite record revenue</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">The Business Times</span><span class="chip">CNA</span><span class="chip">Mothership</span><span class="chip">RTT News</span></div>
+  <span class="lbl">Summary</span><p class="summary">Singapore Airlines Group reported a S$76 million net loss for its fiscal Q1 even as revenue hit a record S$5.71 billion, driven by higher fuel costs and continued losses at associate Air India. SIA paired the announcement with new cabin and product upgrades.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A loss at the national carrier despite record top-line revenue shows how fuel prices and the Air India integration are squeezing group margins. Watch whether this is a one-off cost spike or the start of sustained pressure on SIA's post-pandemic earnings.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">2</span><h3>Singapore PR, 23, charged with financing terrorist acts in Gaza</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">28–29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Mothership</span><span class="chip">Malay Mail</span><span class="chip">SCMP</span><span class="chip">Yahoo SG</span></div>
+  <span class="lbl">Summary</span><p class="summary">A 23-year-old Singapore permanent resident was charged over an alleged transfer of ~US$72 said to help finance a planned terrorist act targeting Palestinians in Gaza. He indicated he will not plead guilty; the offence carries up to 10 years' jail and/or a S$500,000 fine.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The case is unusual in linking terror-financing charges to the Israel–Gaza conflict rather than the jihadist financing Singapore has historically prosecuted. It signals the laws being applied to a broader range of motivations, and the not-guilty stance sets up a closely watched trial.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">3</span><h3>Government considering lowering HDB eligibility age for singles</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Mothership</span><span class="chip">The Online Citizen</span><span class="chip">Malay Mail</span></div>
+  <span class="lbl">Summary</span><p class="summary">National Development Minister Chee Hong Tat said the government is considering lowering the age at which unmarried Singaporeans can buy HDB flats, currently 35. He stopped short of committing to a timeline, citing housing-supply constraints.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Singles' housing access is a perennial flashpoint, and even a signalled review generates strong engagement given demand and pricing. The absence of a firm timeline suggests the government is managing expectations while balancing BTO supply.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">4</span><h3>Amanda Yap, 16, wins Singapore's first medal at Glasgow 2026 Commonwealth Games</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Yahoo News SG</span><span class="chip">Olympics.com</span><span class="chip">CNA</span></div>
+  <span class="lbl">Summary</span><p class="summary">Sixteen-year-old gymnast Amanda Yap claimed Singapore's first medal of the Glasgow 2026 Commonwealth Games, an early highlight of the Republic's campaign that led local live-news coverage through the day.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A teenage medallist opening Singapore's account is exactly the feel-good, nation-building story local outlets amplify during a Games. It spotlights the young-talent pipeline in a sport where Singapore has rarely medalled at this level.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">5</span><h3>Online Safety Commission orders removal of TikTok post falsely linking woman to Faishal case</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · offshoot of 20 Jul resignation</span><span class="date">OSC order 29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">The Straits Times</span><span class="chip">STOMP</span><span class="chip">SCMP</span></div>
+  <span class="lbl">Summary</span><p class="summary">Singapore's newly operational Online Safety Commission ordered the takedown of a TikTok post that falsely identified a fitness instructor as the woman connected to former minister Faishal Ibrahim's resignation. The woman has publicly rejected any link to the case.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>One of the first high-profile enforcement actions by the OSC — an early test of its takedown powers against viral misinformation. It keeps the Faishal saga in the cycle while shifting focus to online harms and the collateral damage of speculation targeting private individuals.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">6</span><h3>Foreign domestic worker jailed for life for killing employer's 73-year-old father</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">The Straits Times</span><span class="chip">Mothership</span></div>
+  <span class="lbl">Summary</span><p class="summary">A foreign domestic worker was sentenced to life imprisonment for suffocating her employer's 73-year-old father with a pillow in a Bishan flat, an attack that followed a theft accusation.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The life sentence reflects the gravity the courts assign to the killing of a vulnerable elderly victim by a caregiver in the home. The case renews attention on the pressures and safeguards in live-in domestic-worker arrangements.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">7</span><h3>Marmite disappears from Singapore shelves as brand is discontinued</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Mothership</span><span class="chip">Goody Feed</span><span class="chip">Yahoo News SG</span></div>
+  <span class="lbl">Summary</span><p class="summary">The umami spread Marmite has vanished from Singapore supermarket shelves, with reports indicating it has been discontinued in the local market. Retailers are sourcing alternatives as consumers react to the loss of a pantry staple.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>A beloved cooking ingredient (think Marmite chicken) exiting the market drives outsized social engagement despite low hard-news weight. It quietly raises questions about supply-chain and distribution decisions affecting long-standing imported brands.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">8</span><h3>Former Havelock PAP MP Lim Soo Peng dies at 97</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Mothership</span><span class="chip">The Straits Times</span></div>
+  <span class="lbl">Summary</span><p class="summary">Lim Soo Peng, a former People's Action Party Member of Parliament for Havelock, has died at the age of 97. Tributes recalled his service during an earlier era of Singapore's parliamentary history.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The passing of a first-generation-era MP prompts reflection on the pioneers who built the PAP's early grassroots machinery. Such obituaries carry symbolic weight amid the current leadership transition.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">9</span><h3>Six men, aged 18–27, charged over Yishun assault that left man unconscious</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · 3 days old</span><span class="date">incident 26 Jul · charges 29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Mothership</span><span class="chip">The Straits Times</span><span class="chip">IBTimes SG</span></div>
+  <span class="lbl">Summary</span><p class="summary">Police will charge six men aged 18 to 27 with rioting after a 48-year-old man was beaten unconscious in a Yishun carpark. The charges follow a manhunt launched after the weekend attack.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The swift move from a public appeal for suspects to formal rioting charges signals police intent to act firmly on group violence. The youth of those charged feeds ongoing concern about gang-style assaults in heartland estates.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">10</span><h3>Father fined S$5,000 and banned from driving for carrying sons in Porsche boot</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Mothership</span><span class="chip">BERNAMA</span></div>
+  <span class="lbl">Summary</span><p class="summary">A 40-year-old father was fined S$5,000 and handed a six-month driving ban after transporting his two sons in the boot of a Porsche. The court noted he had committed more than 15 traffic violations between 2004 and 2020.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The viral details belie a serious road-safety message about child passenger endangerment and repeat offending. The sentence signals the courts' willingness to impose bans and stiff fines even in cases that first read as social-media curiosities.</p></div></div>
+</section>
+
+<!-- ================= US ================= -->
+<section class="panel us" id="us">
+  <h2>United States — top 10</h2>
+
+  <div class="card"><div class="head"><span class="rank">1</span><h3>Trump vows Iran will "get a beating" after fresh missile attack on US troops</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW · escalating</span><span class="date">28–29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">CNN</span><span class="chip">CNBC</span><span class="chip">AP</span><span class="chip">Al Jazeera</span></div>
+  <span class="lbl">Summary</span><p class="summary">CENTCOM said Iran launched an "attempted surprise attack" on US forces (with missiles reported toward troops in Jordan), all intercepted, shattering a roughly two-week pause. On 29 July, Trump warned Iran was "going to get a beating" as fighting resumed and he hosted allied leaders on next steps.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The collapse of the strike pause marks the most dangerous US–Iran escalation of the cycle and puts direct-conflict risk back at the centre of foreign policy. Trump's maximalist rhetoric narrows off-ramps, and the involvement of US bases raises the stakes of any miscalculation.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">2</span><h3>Fed holds rates at 3.5–3.75% with three hawkish dissents</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">CNBC</span><span class="chip">Federal Reserve</span><span class="chip">Reuters</span><span class="chip">Fox Business</span></div>
+  <span class="lbl">Summary</span><p class="summary">The FOMC voted 9-3 to keep the federal funds target range at 3.5–3.75%. Notably, dissenters Hammack, Kashkari and Logan wanted a quarter-point hike — an unusual hawkish split at a time of political pressure to cut.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Three dissents favouring a hike signal genuine inflation anxiety inside the committee, cutting against White House demands for lower rates. The standoff sharpens the debate over Fed independence heading into the fall.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">3</span><h3>Big Tech earnings land as Dow tumbles ~800 points</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">CNBC</span><span class="chip">Bloomberg</span><span class="chip">TheStreet</span></div>
+  <span class="lbl">Summary</span><p class="summary">The Dow fell roughly 800 points amid a chip selloff and caution ahead of the Fed and megacap results. Microsoft and Meta reported after the close this evening, with Apple and Amazon due within 48 hours.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>With valuations stretched on AI optimism, these reports test whether heavy capital spending is translating into returns. A sharp reaction could ripple into the broader risk-off mood driven by Fed and geopolitical uncertainty.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">4</span><h3>Zelensky meets Trump at the White House amid overlapping wars</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Washington Post</span><span class="chip">AP</span><span class="chip">CNBC</span><span class="chip">The Hill</span></div>
+  <span class="lbl">Summary</span><p class="summary">Ukrainian President Zelensky met Trump at the White House, later calling it a "good meeting," as he sought deeper US cooperation. The visit preceded his attendance at Sen. Lindsey Graham's funeral.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The meeting comes as the Ukraine and Iran conflicts increasingly intersect for US strategy and attention. Zelensky's in-person diplomacy reflects continued anxiety in Kyiv about the durability of American support.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">5</span><h3>Sen. Lindsey Graham laid to rest as Washington gathers</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · services ongoing</span><span class="date">death 12 Jul · services 27–29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">CNN</span><span class="chip">TIME</span><span class="chip">NBC</span></div>
+  <span class="lbl">Summary</span><p class="summary">Multi-day memorial and funeral services for the longtime South Carolina Republican, who died at 71 of an aortic dissection, continued in SC and Washington. Attendees include Trump, Zelensky and a broad bipartisan cross-section of officials.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Graham's death removes one of the Senate's most influential foreign-policy hawks precisely as US–Iran tensions surge. The bipartisan turnout underscores his outsized institutional footprint despite a polarising profile.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">6</span><h3>Trump administration asks Supreme Court to revive mail-in voting curbs</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">27–28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Bloomberg</span><span class="chip">CNBC</span><span class="chip">The Hill</span><span class="chip">SCOTUSblog</span></div>
+  <span class="lbl">Summary</span><p class="summary">The DOJ filed an emergency application asking the Supreme Court to allow implementation of Trump's executive order restricting mail-in voting, after a federal appeals court blocked key provisions. The administration wants the rules in place ahead of the midterms.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The emergency posture pushes a consequential voting-rights fight onto the high court's shadow docket on a compressed timeline. The outcome could reshape ballot access in multiple states before November.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">7</span><h3>Oregon wildfires shut 70 miles of I-84 in record-pace season</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING · fresh growth today</span><span class="date">27–29 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">Washington Post</span><span class="chip">AP</span><span class="chip">NPR</span></div>
+  <span class="lbl">Summary</span><p class="summary">Fast-moving wildfires forced closure of roughly 70 miles of Interstate 84 and prompted state-of-emergency declarations, with several fires merging and expanding. Officials say Oregon is on track for its worst wildfire season on record.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The interstate closure signals significant disruption to regional travel and supply routes beyond the fire zone. The record trajectory renews scrutiny of firefighting resources and prevention funding.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">8</span><h3>Trump administration moves to fast-track asylum-seeker deportations</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">CNN</span><span class="chip">NPR</span><span class="chip">Democracy Now</span></div>
+  <span class="lbl">Summary</span><p class="summary">New regulations could route hundreds of thousands of asylum seekers directly into deportation proceedings without initial asylum-officer interviews. Separately, ICE is reportedly accelerating arrests and deportations of Haitians losing Temporary Protected Status.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>Bypassing the credible-fear interview stage would be a major structural change to the asylum system, likely to draw immediate legal challenges. It fits a broader enforcement acceleration that continues to spark protest.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">9</span><h3>McConnell still not cleared to leave rehab after fall</h3></div>
+  <div class="meta"><span class="badge dev"><span class="dot"></span>DEVELOPING</span><span class="date">last update 27–28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">CNN</span><span class="chip">NBC</span><span class="chip">Axios</span></div>
+  <span class="lbl">Summary</span><p class="summary">Sen. Mitch McConnell has not been medically cleared to leave a rehabilitation facility following a fall that led to a lengthy hospitalisation, his office said, as it released a new photo. He indicated he is not yet ready to return to work.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>His extended absence thins the GOP's working majority at a moment of high-stakes votes on national security and the courts. Persistent questions about his condition keep Senate succession dynamics in view.</p></div></div>
+
+  <div class="card"><div class="head"><span class="rank">10</span><h3>Minnesota wildfires scorch Superior National Forest</h3></div>
+  <div class="meta"><span class="badge new"><span class="dot"></span>NEW</span><span class="date">28 Jul 2026</span></div>
+  <div class="outlets"><span class="chip">AP</span><span class="chip">Democracy Now</span></div>
+  <span class="lbl">Summary</span><p class="summary">Roughly 68,000 acres have burned in and around the Superior National Forest, with reports that cancelled federal fire-prevention funding may have worsened the crisis. The blazes add to an unusually severe national fire picture.</p>
+  <div class="commentary"><span class="lbl">Commentary</span><p>The Minnesota fires, alongside Oregon's, point to a broadening wildfire emergency stretching federal response capacity. The funding-cut allegations could turn the disaster into a policy flashpoint.</p></div></div>
+</section>
+</main>
+
+<footer>
+  Preview generated evening of 29 July 2026. Roughly 7 of 10 items in each feed broke in the last 24 hours; the rest are tagged DEVELOPING with their age and latest-update date. Attribution reflects outlets confirmed covering each story; where a major outlet's page could not be fetched directly, items were corroborated across two or more accessible sources. This is a design + content mock-up for review, not the finished site.
+</footer>
+
+<script>
+  const tabs=document.querySelectorAll('.tab');
+  const panels=document.querySelectorAll('.panel');
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active'));
+    panels.forEach(p=>p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.j).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }));
+</script>
+</body>
+</html>
