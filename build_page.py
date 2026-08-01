@@ -47,18 +47,6 @@ CSS = """
   .langbtn{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:8px;
     padding:6px 11px;font-size:12.5px;font-weight:700;cursor:pointer}
   .langbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  .controls{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex:0 0 auto}
-  .voicetoggle{display:flex;gap:4px;align-items:center;font-size:12px;color:var(--muted)}
-  .vbtn{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:8px;
-    padding:5px 9px;font-size:12px;font-weight:700;cursor:pointer}
-  .vbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  .speak{background:var(--chip);border:1px solid var(--line);color:var(--muted);border-radius:7px;
-    padding:1px 7px;font-size:12px;cursor:pointer;line-height:1.4}
-  .speak.playing{background:var(--accent);border-color:var(--accent);color:#fff}
-  .playall{background:var(--accent);border:1px solid var(--accent);color:#fff;border-radius:8px;
-    padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
-  .playall.on{background:var(--dev);border-color:var(--dev);color:#1a1400}
-  .card.reading{outline:2px solid var(--accent);outline-offset:2px}
   .legend{max-width:920px;margin:12px auto 0;padding:0 20px;display:flex;gap:14px;font-size:12px;
     color:var(--muted);align-items:center;flex-wrap:wrap}
   .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:2px 8px;
@@ -114,62 +102,12 @@ function setLang(l){
 var _tabs=document.querySelectorAll('.tab');
 var _panels=document.querySelectorAll('.panel');
 _tabs.forEach(function(t){t.addEventListener('click',function(){
-  if(typeof stopAll==='function')stopAll();
   _tabs.forEach(function(x){x.classList.remove('active');});
   _panels.forEach(function(p){p.classList.remove('active');});
   t.classList.add('active');
   document.getElementById(t.dataset.j).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 });});
-var readLang='en';
-function setVoice(v){readLang=v;document.querySelectorAll('.vbtn').forEach(function(b){b.classList.toggle('on',b.dataset.v===v);});if(typeof stopAll==='function')stopAll();}
-function _pickVoice(lang){var vs=(window.speechSynthesis.getVoices()||[]);
-  var pref=lang==='zh'?['zh-hk','yue','zh-hant','zh-tw','zh']:['en-gb','en-us','en'];
-  for(var p=0;p<pref.length;p++){for(var i=0;i<vs.length;i++){if((vs[i].lang||'').toLowerCase().indexOf(pref[p])===0)return vs[i];}}
-  if(lang==='zh'){for(var j=0;j<vs.length;j++){var n=(vs[j].name||'').toLowerCase();if(n.indexOf('cantonese')>=0||n.indexOf('sinji')>=0)return vs[j];}}
-  return null;}
-function _cardText(card){var sel=readLang==='zh'?'.zh':'.en';var parts=[];['h3','.summary','.commentary p'].forEach(function(q){var el=card.querySelector(q+' '+sel);if(el&&el.textContent)parts.push(el.textContent);});return parts.join('. ');}
-function _mkUtter(text){var u=new SpeechSynthesisUtterance(text);u.lang=readLang==='zh'?'zh-HK':'en-GB';var v=_pickVoice(readLang);if(v)u.voice=v;u.rate=readLang==='zh'?0.95:1.0;return u;}
-var _queue=[],_qi=0,_playingAll=false;
-function stopAll(){_playingAll=false;_queue=[];_qi=0;if('speechSynthesis' in window)window.speechSynthesis.cancel();
-  document.querySelectorAll('.speak.playing').forEach(function(b){b.classList.remove('playing');});
-  document.querySelectorAll('.card.reading').forEach(function(c){c.classList.remove('reading');});
-  var pb=document.getElementById('playall');if(pb){pb.classList.remove('on');pb.textContent='▶ Play all';}}
-function _next(){
-  if(!_playingAll||_qi>=_queue.length){stopAll();return;}
-  var card=_queue[_qi];
-  document.querySelectorAll('.card.reading').forEach(function(c){c.classList.remove('reading');});
-  card.classList.add('reading');
-  try{card.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
-  var u=_mkUtter(_cardText(card));
-  u.onend=function(){_qi++;_next();};
-  u.onerror=function(){_qi++;_next();};
-  window.speechSynthesis.speak(u);
-}
-function playAll(){
-  if(!('speechSynthesis' in window)){alert('Read-aloud is not supported in this browser.');return;}
-  if(_playingAll){stopAll();return;}
-  var panel=document.querySelector('.panel.active');
-  if(!panel)return;
-  _queue=Array.prototype.slice.call(panel.querySelectorAll('.card'));
-  if(!_queue.length)return;
-  _qi=0;_playingAll=true;
-  var pb=document.getElementById('playall');if(pb){pb.classList.add('on');pb.textContent='⏸ Stop';}
-  _next();
-}
-function speakCard(btn){
-  if(!('speechSynthesis' in window)){alert('Read-aloud is not supported in this browser.');return;}
-  var wasPlaying=btn.classList.contains('playing');
-  stopAll();
-  if(wasPlaying)return;
-  var card=btn.closest('.card');
-  var u=_mkUtter(_cardText(card));
-  u.onend=function(){btn.classList.remove('playing');};
-  u.onerror=function(){btn.classList.remove('playing');};
-  btn.classList.add('playing');
-  window.speechSynthesis.speak(u);
-}
-if('speechSynthesis' in window){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}
 </script>
 """
 
@@ -194,8 +132,7 @@ def render_card(item):
         f'<span class="rank">{esc(item.get("rank",""))}</span>'
         f'<h3>{bl(item.get("headline_en",""), item.get("headline_zh",""))}</h3></div>\n'
         f'  <div class="meta"><span class="badge {badge_cls}"><span class="dot"></span>{badge}</span>'
-        f'<span class="date">{esc(item.get("date",""))}</span>'
-        f'<button class="speak" title="Read aloud / 朗讀" onclick="speakCard(this)">\U0001F50A</button></div>\n'
+        f'<span class="date">{esc(item.get("date",""))}</span></div>\n'
         f'  <div class="outlets">{outlets}</div>\n'
         f'  <span class="lbl">{bl("Summary","摘要")}</span>'
         f'<p class="summary">{bl(item.get("summary_en",""), item.get("summary_zh",""))}</p>\n'
@@ -240,16 +177,9 @@ def render_html(data, disp):
         f'<title>Daily Top 10 · 每日十大新聞</title>\n<style>{CSS}</style>\n</head>\n'
         '<body class="lang-en">\n'
         f'<header><div class="hrow"><div><h1>{h1}</h1><p class="sub">{sub}</p></div>'
-        '<div class="controls">'
         '<div class="langtoggle">'
         '<button class="langbtn on" data-l="en" onclick="setLang(\'en\')">EN</button>'
         '<button class="langbtn" data-l="zh" onclick="setLang(\'zh\')">繁體</button>'
-        '</div>'
-        '<div class="voicetoggle"><span>\U0001F50A</span>'
-        '<button class="vbtn on" data-v="en" onclick="setVoice(\'en\')">EN</button>'
-        '<button class="vbtn" data-v="zh" onclick="setVoice(\'zh\')">粵</button>'
-        '</div>'
-        '<button id="playall" class="playall" onclick="playAll()">▶ Play all</button>'
         '</div></div></header>\n'
         f'{legend}\n<nav class="tabs">\n{tabs}</nav>\n<main>\n{panels}</main>\n'
         f'<footer>{foot}</footer>\n{SCRIPT}\n</body>\n</html>\n'
