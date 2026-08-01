@@ -154,22 +154,23 @@ def render_html(data, disp):
     names_en = " · ".join(j["short_en"] for j in JURISDICTIONS)
     names_zh = " · ".join(j["short_zh"] for j in JURISDICTIONS)
     h1 = bl(f"Daily Top 10 — {names_en}", f"每日十大新聞 — {names_zh}")
-    sub = bl(f"Updated {disp} · ranked by prominence + engagement + recency",
-             f"更新於 {disp} · 按重要性、關注度及時效排序")
+    sub = bl(f"Updated {disp} · ranked by how widely it's covered &amp; discussed now",
+             f"更新於 {disp} · 按當前被廣泛報道及討論的程度排序")
     legend = (
         '<div class="legend">\n'
         f'  <span class="badge new"><span class="dot"></span>{bl("NEW","最新")}</span> '
         f'{bl("broke or updated in the last 24h","24小時內發生或更新")}\n'
         f'  <span class="badge dev"><span class="dot"></span>{bl("DEVELOPING","發展中")}</span> '
-        f'{bl("older but still active — shows age &amp; last update","較早但仍在發展 — 顯示時間")}\n'
+        f'{bl("older but still commanding attention","較早但仍受高度關注")}\n'
         '</div>'
     )
     foot = bl(
-        "Updated automatically via live web search. Summaries are neutral; commentary is analytical and "
-        "non-partisan. Each feed leads with last-24-hour stories; older items are tagged DEVELOPING. "
-        "Always check a headline against the linked outlet before relying on it.",
-        "由即時網絡搜尋自動更新。摘要力求中立，評論為分析性質且不偏不倚。每個地區以最近24小時的新聞為主，"
-        "較早的新聞標示為「發展中」。引用前請以原始新聞機構為準。")
+        "Updated automatically via live web search. Stories are ranked by how widely each is being covered and "
+        "discussed right now — not just how recent. NEW = broke or updated in the last 24h; DEVELOPING = older but "
+        "still commanding attention. Summaries are neutral and commentary non-partisan; check a headline against the "
+        "linked outlet before relying on it.",
+        "由即時網絡搜尋自動更新。新聞按當前被廣泛報道及討論的程度排序，而非僅按時間。最新＝24小時內發生或更新；"
+        "發展中＝較早但仍受高度關注。摘要力求中立、評論不偏不倚；引用前請以原始新聞機構為準。")
 
     return (
         '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n'
