@@ -24,6 +24,7 @@ from zoneinfo import ZoneInfo
 DISPLAY_TZ = "Europe/London"
 
 JURISDICTIONS = [
+    {"key": "world", "flag": "\U0001F30D",        "en": "World",            "zh": "國際",     "short_en": "World",     "short_zh": "國際"},
     {"key": "uk", "flag": "\U0001F1EC\U0001F1E7", "en": "United Kingdom",   "zh": "英國",     "short_en": "UK",        "short_zh": "英國"},
     {"key": "hk", "flag": "\U0001F1ED\U0001F1F0", "en": "Hong Kong",        "zh": "香港",     "short_en": "Hong Kong", "short_zh": "香港"},
     {"key": "sg", "flag": "\U0001F1F8\U0001F1EC", "en": "Singapore",        "zh": "新加坡",   "short_en": "Singapore", "short_zh": "新加坡"},
@@ -34,7 +35,7 @@ JURISDICTIONS = [
 CSS = """
   :root{--bg:#0f1115;--panel:#171a21;--panel2:#1d222b;--line:#2a2f3a;--txt:#e8eaed;
     --muted:#9aa2b1;--accent:#4f8cff;--chip:#242a35;--uk:#5b8def;--hk:#e0556b;--sg:#e0a83c;
-    --us:#42b98a;--cn:#e23b3b;--new:#2ec17c;--dev:#e0a83c;}
+    --us:#42b98a;--cn:#e23b3b;--world:#8b5cf6;--new:#2ec17c;--dev:#e0a83c;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,
     "Segoe UI",Roboto,Helvetica,Arial,"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.6;font-size:15px}
@@ -46,6 +47,14 @@ CSS = """
   .langbtn{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:8px;
     padding:6px 11px;font-size:12.5px;font-weight:700;cursor:pointer}
   .langbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .controls{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex:0 0 auto}
+  .voicetoggle{display:flex;gap:4px;align-items:center;font-size:12px;color:var(--muted)}
+  .vbtn{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:8px;
+    padding:5px 9px;font-size:12px;font-weight:700;cursor:pointer}
+  .vbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .speak{background:var(--chip);border:1px solid var(--line);color:var(--muted);border-radius:7px;
+    padding:1px 7px;font-size:12px;cursor:pointer;line-height:1.4}
+  .speak.playing{background:var(--accent);border-color:var(--accent);color:#fff}
   .legend{max-width:920px;margin:12px auto 0;padding:0 20px;display:flex;gap:14px;font-size:12px;
     color:var(--muted);align-items:center;flex-wrap:wrap}
   .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:2px 8px;
@@ -64,6 +73,7 @@ CSS = """
   .tab[data-j="sg"].active{background:var(--sg);border-color:var(--sg);color:#1a1400}
   .tab[data-j="us"].active{background:var(--us);border-color:var(--us);color:#04231a}
   .tab[data-j="cn"].active{background:var(--cn);border-color:var(--cn)}
+  .tab[data-j="world"].active{background:var(--world);border-color:var(--world)}
   main{max-width:920px;margin:0 auto;padding:18px 16px 60px}
   .panel{display:none} .panel.active{display:block}
   .panel h2{font-size:16px;margin:6px 4px 14px;color:var(--muted);font-weight:600}
@@ -73,6 +83,7 @@ CSS = """
   .uk .card:before{background:var(--uk)} .hk .card:before{background:var(--hk)}
   .sg .card:before{background:var(--sg)} .us .card:before{background:var(--us)}
   .cn .card:before{background:var(--cn)}
+  .world .card:before{background:var(--world)}
   .rank{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;
     background:var(--chip);font-weight:700;font-size:14px;margin-right:9px;color:var(--txt);flex:0 0 auto}
   .head{display:flex;align-items:flex-start;margin-bottom:7px}
@@ -105,6 +116,34 @@ _tabs.forEach(function(t){t.addEventListener('click',function(){
   document.getElementById(t.dataset.j).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 });});
+var readLang='en';
+function setVoice(v){readLang=v;document.querySelectorAll('.vbtn').forEach(function(b){b.classList.toggle('on',b.dataset.v===v);});}
+function _pickVoice(lang){var vs=(window.speechSynthesis.getVoices()||[]);
+  var pref=lang==='zh'?['zh-hk','yue','zh-hant','zh-tw','zh']:['en-gb','en-us','en'];
+  for(var p=0;p<pref.length;p++){for(var i=0;i<vs.length;i++){if((vs[i].lang||'').toLowerCase().indexOf(pref[p])===0)return vs[i];}}
+  if(lang==='zh'){for(var j=0;j<vs.length;j++){var n=(vs[j].name||'').toLowerCase();if(n.indexOf('cantonese')>=0||n.indexOf('sinji')>=0)return vs[j];}}
+  return null;}
+function speakCard(btn){
+  if(!('speechSynthesis' in window)){alert('Read-aloud is not supported in this browser.');return;}
+  var synth=window.speechSynthesis;
+  var wasPlaying=btn.classList.contains('playing');
+  synth.cancel();
+  document.querySelectorAll('.speak.playing').forEach(function(b){b.classList.remove('playing');});
+  if(wasPlaying)return;
+  var card=btn.closest('.card');
+  var sel=readLang==='zh'?'.zh':'.en';
+  var parts=[];
+  ['h3','.summary','.commentary p'].forEach(function(q){var el=card.querySelector(q+' '+sel);if(el&&el.textContent)parts.push(el.textContent);});
+  var u=new SpeechSynthesisUtterance(parts.join('. '));
+  u.lang=readLang==='zh'?'zh-HK':'en-GB';
+  var v=_pickVoice(readLang); if(v)u.voice=v;
+  u.rate=readLang==='zh'?0.95:1.0;
+  u.onend=function(){btn.classList.remove('playing');};
+  u.onerror=function(){btn.classList.remove('playing');};
+  btn.classList.add('playing');
+  synth.speak(u);
+}
+if('speechSynthesis' in window){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}
 </script>
 """
 
@@ -129,7 +168,8 @@ def render_card(item):
         f'<span class="rank">{esc(item.get("rank",""))}</span>'
         f'<h3>{bl(item.get("headline_en",""), item.get("headline_zh",""))}</h3></div>\n'
         f'  <div class="meta"><span class="badge {badge_cls}"><span class="dot"></span>{badge}</span>'
-        f'<span class="date">{esc(item.get("date",""))}</span></div>\n'
+        f'<span class="date">{esc(item.get("date",""))}</span>'
+        f'<button class="speak" title="Read aloud / 朗讀" onclick="speakCard(this)">\U0001F50A</button></div>\n'
         f'  <div class="outlets">{outlets}</div>\n'
         f'  <span class="lbl">{bl("Summary","摘要")}</span>'
         f'<p class="summary">{bl(item.get("summary_en",""), item.get("summary_zh",""))}</p>\n'
@@ -174,9 +214,15 @@ def render_html(data, disp):
         f'<title>Daily Top 10 · 每日十大新聞</title>\n<style>{CSS}</style>\n</head>\n'
         '<body class="lang-en">\n'
         f'<header><div class="hrow"><div><h1>{h1}</h1><p class="sub">{sub}</p></div>'
+        '<div class="controls">'
         '<div class="langtoggle">'
         '<button class="langbtn on" data-l="en" onclick="setLang(\'en\')">EN</button>'
         '<button class="langbtn" data-l="zh" onclick="setLang(\'zh\')">繁體</button>'
+        '</div>'
+        '<div class="voicetoggle"><span>\U0001F50A</span>'
+        '<button class="vbtn on" data-v="en" onclick="setVoice(\'en\')">EN</button>'
+        '<button class="vbtn" data-v="zh" onclick="setVoice(\'zh\')">粵</button>'
+        '</div>'
         '</div></div></header>\n'
         f'{legend}\n<nav class="tabs">\n{tabs}</nav>\n<main>\n{panels}</main>\n'
         f'<footer>{foot}</footer>\n{SCRIPT}\n</body>\n</html>\n'
