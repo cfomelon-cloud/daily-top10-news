@@ -30,12 +30,13 @@ JURISDICTIONS = [
     {"key": "sg", "flag": "\U0001F1F8\U0001F1EC", "en": "Singapore",        "zh": "新加坡",   "short_en": "Singapore", "short_zh": "新加坡"},
     {"key": "us", "flag": "\U0001F1FA\U0001F1F8", "en": "United States",    "zh": "美國",     "short_en": "US",        "short_zh": "美國"},
     {"key": "cn", "flag": "\U0001F1E8\U0001F1F3", "en": "China (mainland)", "zh": "中國內地", "short_en": "China",     "short_zh": "中國"},
+    {"key": "fin", "flag": "\U0001F4B9",          "en": "Finance & Economics", "zh": "國際財經", "short_en": "Finance",   "short_zh": "財經"},
 ]
 
 CSS = """
   :root{--bg:#0f1115;--panel:#171a21;--panel2:#1d222b;--line:#2a2f3a;--txt:#e8eaed;
     --muted:#9aa2b1;--accent:#4f8cff;--chip:#242a35;--uk:#5b8def;--hk:#e0556b;--sg:#e0a83c;
-    --us:#42b98a;--cn:#e23b3b;--world:#8b5cf6;--new:#2ec17c;--dev:#e0a83c;}
+    --us:#42b98a;--cn:#e23b3b;--world:#8b5cf6;--fin:#17b0c4;--new:#2ec17c;--dev:#e0a83c;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,
     "Segoe UI",Roboto,Helvetica,Arial,"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.6;font-size:15px}
@@ -66,6 +67,7 @@ CSS = """
   .tab[data-j="us"].active{background:var(--us);border-color:var(--us);color:#04231a}
   .tab[data-j="cn"].active{background:var(--cn);border-color:var(--cn)}
   .tab[data-j="world"].active{background:var(--world);border-color:var(--world)}
+  .tab[data-j="fin"].active{background:var(--fin);border-color:var(--fin);color:#04222a}
   main{max-width:920px;margin:0 auto;padding:18px 16px 60px}
   .panel{display:none} .panel.active{display:block}
   .panel h2{font-size:16px;margin:6px 4px 14px;color:var(--muted);font-weight:600}
@@ -76,6 +78,7 @@ CSS = """
   .sg .card:before{background:var(--sg)} .us .card:before{background:var(--us)}
   .cn .card:before{background:var(--cn)}
   .world .card:before{background:var(--world)}
+  .fin .card:before{background:var(--fin)}
   .rank{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;
     background:var(--chip);font-weight:700;font-size:14px;margin-right:9px;color:var(--txt);flex:0 0 auto}
   .head{display:flex;align-items:flex-start;margin-bottom:7px}
