@@ -87,6 +87,8 @@ CSS = """
   .date{font-size:11.5px;color:var(--muted)}
   .outlets{margin:0 0 10px 35px;display:flex;flex-wrap:wrap;gap:5px}
   .chip{background:var(--chip);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .src{font-size:11px;color:var(--accent);text-decoration:none;font-weight:600}
+  .src:hover{text-decoration:underline}
   .lbl{font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:700;
     display:block;margin:0 0 2px}
   .summary{margin:0 0 11px}
@@ -130,13 +132,15 @@ def render_card(item):
     badge_cls = "new" if is_new else "dev"
     badge = bl("NEW", "最新") if is_new else bl("DEVELOPING", "發展中")
     outlets = "".join(f'<span class="chip">{esc(o)}</span>' for o in item.get("outlets", []))
+    url = str(item.get("url", "")).strip()
+    src = (f'<a class="src" href="{esc(url)}" target="_blank" rel="noopener">' f'{bl("Source ›", "來源 ›")}</a>') if url.startswith("http") else ""
     return (
         '\n  <div class="card"><div class="head">'
         f'<span class="rank">{esc(item.get("rank",""))}</span>'
         f'<h3>{bl(item.get("headline_en",""), item.get("headline_zh",""))}</h3></div>\n'
         f'  <div class="meta"><span class="badge {badge_cls}"><span class="dot"></span>{badge}</span>'
         f'<span class="date">{esc(item.get("date",""))}</span></div>\n'
-        f'  <div class="outlets">{outlets}</div>\n'
+        f'  <div class="outlets">{outlets}{src}</div>\n'
         f'  <span class="lbl">{bl("Summary","摘要")}</span>'
         f'<p class="summary">{bl(item.get("summary_en",""), item.get("summary_zh",""))}</p>\n'
         f'  <div class="commentary"><span class="lbl">{bl("Commentary","評論")}</span>'
